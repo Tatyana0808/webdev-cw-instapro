@@ -50,7 +50,7 @@ export function renderPostsPageComponent({ appEl }) {
            
              <p class="post-likes-text">
                Нравится: ${postItem.userLikes.length > 0 ? `${postItem.userLikes[postItem.userLikes.lenght - 1].name}
-               ${postItem.length - 1 > 0 ? 'и еще' + (postItem.length - 1) : ''} ` : '0'}
+               ${postItem.userLikes.length - 1 > 0 ? 'и еще' + (postItem.usersLikes.length - 1) : ''} ` : '0'}
              </p>
            </div>
            <p class="post-text">
@@ -64,7 +64,7 @@ export function renderPostsPageComponent({ appEl }) {
         
       ` 
      
-   }).join() ;
+   }).join("") ;
 
   } else {
 
