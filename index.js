@@ -1,4 +1,4 @@
-import { getPosts } from "./api.js";
+import { getPosts, addPost, getPostsOfUser } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -95,6 +95,7 @@ export const goToPage = (newPage, data) => {
 
 		return;
 	}
+
       
 
   throw new Error("страницы не существует");
@@ -151,8 +152,10 @@ export const goToPage = (newPage, data) => {
 
   if (page === USER_POSTS_PAGE) {
     // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+   // appEl.innerHTML = "Здесь будет страница фотографий пользователя";
+    return renderPostsPageComponent({
+			appEl,
+    }); 
   }
 };
 
