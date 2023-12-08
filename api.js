@@ -73,6 +73,7 @@ export function uploadImage({ file }) {
 }
 export function addPost({ token, imageUrl }) {
   const commentInputElement = document.getElementById('description')
+  console.log( commentInputElement)
   return fetch(postsHost, {
       method: 'POST',
       body: JSON.stringify({

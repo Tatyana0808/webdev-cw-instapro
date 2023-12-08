@@ -12,6 +12,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     appEl.innerHTML = appHtml;
 
     document.getElementById("add-button").addEventListener("click", () => {
+      
       onAddPostClick({
         description: "Описание картинки",
         imageUrl: "https://image.png",
