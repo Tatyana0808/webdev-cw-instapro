@@ -7,7 +7,7 @@ export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
   console.log("Актуальный список постов:", posts);
 
-    let message = null;
+  let message = null;
   if (posts.length) {
     const getApiPosts = posts.map((postItem) => {
       return {
@@ -61,11 +61,11 @@ export function renderPostsPageComponent({ appEl }) {
 
   } else {
 
-    message = "постов нет"
+    message = "постов нет";
 
   }
 
-  }
+}
 
   
 
