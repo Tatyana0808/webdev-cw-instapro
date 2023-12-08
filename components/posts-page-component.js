@@ -1,7 +1,8 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
-import { getPosts } from "../api.js";
+import { posts, goToPage, getToken, page, renderApp, setPosts } from "../index.js";
+import { getPosts,addLikePost, removeLikePost } from "../api.js";
+import { replaceSave } from "../helpers.js";
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -11,36 +12,42 @@ export function renderPostsPageComponent({ appEl }) {
   if (posts.length) {
     const getApiPosts = posts.map((postItem) => {
       return {
-        userId: postItem.id,
-        userImageUrl: postItem.imageUrl,
-      // postCreatedAt: formatDistance(new Date(postItem.createdAt)), new Date , { locale: ru}),
-       description: postItem.description,
-       postId: postItem.user.id,
-       userName: postItem.user.name,
-       userLogin: postItem.user.login,
-       postImageUrl: postItem.user.ImageUrl,
-       userLikes: postItem. likes,
-       isLiked: postItem.isLiked,
+        postId: postItem.id,
+				postImageUrl: postItem.imageUrl,
+				postCreatedAt: formatDistance(new Date(postItem.createdAt), new Date, { locale: ru }),
+				
+				description: replaceSave(postItem.description),
+				userId: postItem.user.id,
+				
+				userName: replaceSave(postItem.user.name),
+				userLogin: postItem.user.login,
+				postImageUserUrl: postItem.user.imageUrl,
+				usersLikes: postItem.likes,
   
   
       }
     })
-    message =  getApiPosts.map((postItem) => {
+    message =  getApiPosts.map((postItem, index) => {
       return `
           
     
          <li class="post">
-           <div class="post-header" data-user-id="${postItem.user.id}">
-               <img src="${postItem.userImageUrl}" class="post-header__user-image">
-               <p class="post-header__user-name">${postItem.username}</p>
+           <div class="post-header" data-user-id="${postItem.userId}">
+               <img src="${postItem.postImageUserUrl}" class="post-header__user-image">
+               <p class="post-header__user-name">${postItem.userName}</p>
            </div>
            <div class="post-image-container">
-             <img class="post-image" src="${postItem.postImageUrl}">
+             <img class="post-image" data-post-id="${postItem.postId}" src="${postItem.postImageUrl}"  data-index="${index}" >
            </div>
            <div class="post-likes">
-             <button data-post-id="${postItem.postId}" class="like-button">
-               <img src="./assets/images/like-active.svg">
-             </button>
+             <button data-post-id="${postItem.postId}"data-like="${postItem.isLiked ? 'true' : ''}" data-index="${index}" class="like-button">
+             <img src=${
+               postItem.isLiked
+                   ? './assets/images/like-active.svg'
+                   : './assets/images/like-not-active.svg'
+           }>
+           </button> 
+           
              <p class="post-likes-text">
                Нравится: ${postItem.userLikes.length > 0 ? `${postItem.userLikes[postItem.userLikes.lenght - 1].name}
                ${postItem.length - 1 > 0 ? 'и еще' + (postItem.length - 1) : ''} ` : '0'}
@@ -51,7 +58,7 @@ export function renderPostsPageComponent({ appEl }) {
              ${postItem.description}
            </p>
            <p class="post-date">
-             ${postItem.postCreatedAt}
+             ${postItem.postCreatedAt} назад
            </p>
          </li>
         
@@ -65,7 +72,7 @@ export function renderPostsPageComponent({ appEl }) {
 
   }
 
-}
+
 
   
 
@@ -75,10 +82,10 @@ export function renderPostsPageComponent({ appEl }) {
    */  
 
   const originlHtml = ` <div class="page-container">
-  <div class="header-container"></div>
-  <ul class="posts">
-   ${message}
-  </ul>
+     <div class="header-container"></div>
+     <ul class="posts">
+      ${message}
+     </ul>
   </div>
   `
 
@@ -97,3 +104,56 @@ export function renderPostsPageComponent({ appEl }) {
     });
   }
 
+  likeEventListener({ token: getToken() })
+  likeEventListenerOnIMG({ token: getToken() })
+}
+export function likeEventListener() {
+	const likeButtons = document.querySelectorAll('.like-button')
+	likeButtons.forEach((likeButton) => {
+		likeButton.addEventListener('click', (event) => {
+			event.stopPropagation()
+			const postId = likeButton.dataset.postId
+			const index = likeButton.dataset.index
+      if (posts[index].isLiked) {
+				removeLikePost({ token: getToken(), postId })
+        .then((updatedPost) => {
+          posts[index].isLiked = false
+          posts[index].likes = updatedPost.post.likes;
+						renderApp();
+        })
+      } else {
+				addLikePost({ token: getToken(), postId })
+        .then((updatedPost) => {
+          posts[index].isLiked = true
+            posts[index].likes = updatedPost.post.likes;
+						renderApp();
+					})
+			}
+		})
+  })
+}
+export function likeEventListenerOnIMG() {
+	const likeButtons = document.querySelectorAll('.post-image')
+	likeButtons.forEach((likeButton) => {
+		likeButton.addEventListener('dblclick', (event) => {
+			event.stopPropagation()
+			const postId = likeButton.dataset.postId
+			const index = likeButton.dataset.index
+      if (posts[index].isLiked) {
+				removeLikePost({ token: getToken(), postId })
+        .then((updatedPost) => {
+          posts[index].isLiked = false
+          posts[index].likes = updatedPost.post.likes;
+          renderApp();
+        })
+			} else {
+				addLikePost({ token: getToken(), postId })
+          .then((updatedPost) => {
+						posts[index].isLiked = true
+            posts[index].likes = updatedPost.post.likes;
+						renderApp();
+					})
+			}
+		})
+  })
+}
