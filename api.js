@@ -2,7 +2,7 @@
 // "боевая" версия инстапро лежит в ключе prod
 import {renderApp, setPosts} from "./index.js";
 import { replaceSave } from "./helpers.js"
-import { posts } from "./index.js";
+//import { posts } from "./index.js";
 const personalKey = "vorobyeva-tatyana";
 const baseHost = "https://wedev-api.sky.pro";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
