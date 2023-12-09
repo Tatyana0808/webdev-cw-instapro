@@ -74,15 +74,27 @@ export const goToPage = (newPage, data) => {
     if (newPage === USER_POSTS_PAGE) {
       // TODO: реализовать получение постов юзера из API
 
-      console.log("Открываю страницу пользователя: ", data.userId);
-      page = USER_POSTS_PAGE;
-      posts = [];
-      return renderApp();
-    }
-    page = newPage;
-    renderApp();
-    return;
-  }
+      page = LOADING_PAGE
+			renderApp()
+			const userId = data.userId
+
+			return getPostsOfUser({ token: getToken(), userId: userId })
+				.then((newPosts) => {
+					page = USER_POSTS_PAGE
+					posts = newPosts
+					renderApp()
+				})
+				.catch((error) => {
+					console.error(error)
+					goToPage(POSTS_PAGE)
+				})
+		}
+
+		page = newPage;
+		renderApp();
+
+		return;
+	}
 
 
       
@@ -120,14 +132,18 @@ export const goToPage = (newPage, data) => {
         // TODO: реализовать добавление поста в API
         console.log("Добавляю пост...", { description, imageUrl });
         addPost({ 
-					token: getToken(),
-          imageUrl}).then(() =>{
-						goToPage(POSTS_PAGE);
-					})
-      },
-    });
-  }
-
+					description, 
+					imageUrl, 
+					token: getToken() 
+				})
+					.then((data) => {
+						if (data) {
+							goToPage(POSTS_PAGE);
+						}
+					});
+			},
+		});
+	}
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
       appEl,
@@ -136,9 +152,11 @@ export const goToPage = (newPage, data) => {
 
   if (page === USER_POSTS_PAGE) {
     // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return; 
-  }
+   // appEl.innerHTML = "Здесь будет страница фотографий пользователя";
+   return renderPostsPageComponent({
+    appEl,
+  });
+}
 };
 
 goToPage(POSTS_PAGE);
