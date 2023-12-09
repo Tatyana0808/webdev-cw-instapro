@@ -25,6 +25,7 @@ export function renderPostsPageComponent({ appEl }) {
 				userLogin: postItem.user.login,
 				postImageUserUrl: postItem.user.imageUrl,
 				usersLikes: postItem.likes,
+        isLiked: postItem.isLiked,
   
   
       }
