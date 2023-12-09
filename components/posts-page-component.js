@@ -14,7 +14,7 @@ export function renderPostsPageComponent({ appEl }) {
       return {
         postId: postItem.id,
 				postImageUrl: postItem.imageUrl,
-				postCreatedAt: formatDistance(new Date(postItem.createdAt), new Date, { locale: ru }),
+				//postCreatedAt: formatDistance(new Date(postItem.createdAt), new Date, { locale: ru }),
 				
 				description: replaceSave(postItem.description),
 				userId: postItem.user.id,
@@ -49,7 +49,7 @@ export function renderPostsPageComponent({ appEl }) {
            </button> 
            
              <p class="post-likes-text">
-               Нравится: ${postItem.userLikes.length > 0 ? `${postItem.userLikes[postItem.userLikes.lenght - 1].name}
+               Нравится: ${postItem.userLikes > 0 ? `${postItem.userLikes[postItem.userLikes.lenght - 1].name}
                ${postItem.userLikes.length - 1 > 0 ? 'и еще' + (postItem.usersLikes.length - 1) : ''} ` : '0'}
              </p>
            </div>
