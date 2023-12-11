@@ -55,7 +55,7 @@ export function renderPostsPageComponent({ appEl }) {
            </button> 
            
              <p class="post-likes-text">
-               Нравится: ${postItem.usersLikes.lenght > 0 ? `${postItem.usersLikes[postItem.usersLikes.lenght - 1].name}
+               Нравится: ${postItem.usersLikes.length > 0 ? `${postItem.usersLikes[postItem.usersLikes.length - 1].name}
                ${postItem.usersLikes.length - 1 > 0 ? 'и еще' + (postItem.usersLikes.length - 1) : ''} ` : '0'}
              </p>
            </div>
