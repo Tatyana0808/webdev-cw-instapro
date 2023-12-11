@@ -9,6 +9,7 @@ import { replaceSave } from "../helpers.js";
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
   console.log("Актуальный список постов:", posts);
+  
 
   let message = null;
   if (posts) {
@@ -30,6 +31,8 @@ export function renderPostsPageComponent({ appEl }) {
   
       }
     })
+    
+   
     message =  getApiPosts.map((postItem, index) => {
       return `
           
@@ -66,7 +69,7 @@ export function renderPostsPageComponent({ appEl }) {
          </li>
         
       ` 
-     
+      
    }).join("") ;
 
   } else {
@@ -75,7 +78,7 @@ export function renderPostsPageComponent({ appEl }) {
 
   }
 
-
+  
 
   
 
