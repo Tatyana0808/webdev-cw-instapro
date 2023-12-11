@@ -11,7 +11,7 @@ export function renderPostsPageComponent({ appEl }) {
   console.log("Актуальный список постов:", posts);
 
   let message = null;
-  if (posts.length) {
+  if (posts) {
     const getApiPosts = posts.map((postItem) => {
       return {
         postId: postItem.id,
